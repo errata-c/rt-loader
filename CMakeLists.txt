@@ -66,6 +66,7 @@ target_link_libraries(rt-loader-gl3w PUBLIC rt-loader unofficial::gl3w::gl3w)
 target_link_libraries(rt-loader-glbinding PUBLIC rt-loader glbinding::glbinding)
 target_link_libraries(rt-loader-epoxy PRIVATE rt-loader "$<BUILD_INTERFACE:${EPOXY_LIB}>")
 
+
 # Build the tests once the option is enabled.
 if(${BUILD_TESTS})
 	add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/tests")
