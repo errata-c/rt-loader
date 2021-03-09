@@ -1,13 +1,11 @@
 #include <rt/loader.hpp>
 
-namespace rt {
-	bool load(glloader loader) {
-		glbinding::Binding::initialize(loader);
-		return true;
-	}
+bool rt_loader_load(void) {
+	glbinding::Binding::initialize(glbinding::getProcAddress);
+	return true;
+};
 
-	bool load() {
-		glbinding::Binding::initialize(glbinding::getProcAddress);
-		return false;
-	};
+bool rt_loader_load_with(rt_loader_glloader loader) {
+	glbinding::Binding::initialize((rt::glloader)loader);
+	return true;
 };

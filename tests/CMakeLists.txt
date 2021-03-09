@@ -8,3 +8,5 @@ add_subdirectory("gl3w")
 add_subdirectory("glad")
 add_subdirectory("glbinding")
 add_subdirectory("glew")
+
+add_subdirectory("indirection")

@@ -1,28 +1,47 @@
 #pragma once
-namespace rt {
-	namespace intern {
-		static constexpr int numGLLibs = 0
+#include <iostream>
+#include <functional>
+
+static_assert(0
 #if defined(RT_LOADER_GLEW)
-			+1
+	+1
 #endif
 #if defined(RT_LOADER_GLAD)
-			+1
+	+1
 #endif
 #if defined(RT_LOADER_GL3W)
-			+1
+	+1
 #endif
 #if defined(RT_LOADER_GLBINDING)
-			+1
+	+1
 #endif
 #if defined(RT_LOADER_EPOXY)
-			+1
+	+1
 #endif
-			;
-	};
-};
+	<= 1, "Too many OpenGL loaders have been linked!");
 
-static_assert(rt::intern::numGLLibs != 0, "No supported OpenGL loader library found!");
-static_assert(rt::intern::numGLLibs == 1, "Too many OpenGL loader libraries found!");
+extern "C" {
+	typedef void (*rt_loader_glproc)(void);
+	typedef void*(*rt_loader_glloader)(const char*);
+
+	bool rt_loader_load(void);
+	bool rt_loader_load_with(rt_loader_glloader);
+}
+
+namespace rt {
+	using glproc = rt_loader_glproc;
+	using glloader = glproc(*)(const char*);
+
+	using load_function = bool(*)();
+	using load_with_function = bool(*)(glloader);
+
+	static bool load() {
+		return rt_loader_load();
+	}
+	static bool load(glloader loader) {
+		return rt_loader_load_with((rt_loader_glloader)loader);
+	}
+};
 
 #if defined(RT_LOADER_GLEW)
 #include <GL/glew.h>
@@ -41,12 +60,6 @@ using namespace gl;
 
 #elif defined(RT_LOADER_EPOXY)
 #include <epoxy/gl.h>
+
 #endif
 
-namespace rt {
-	using glproc = void(*)(void);
-	using glloader = glproc(*)(const char*);
-
-	bool load();
-	bool load(glloader loader);
-};

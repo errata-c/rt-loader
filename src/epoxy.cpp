@@ -1,10 +1,8 @@
 #include <rt/loader.hpp>
 
-namespace rt {
-	bool load() {
-		return true;
-	}
-	bool load(glloader loader) {
-		return true;
-	}
+bool rt_loader_load(void) {
+	return true;
+}
+bool rt_loader_load_with(rt_loader_glloader loader) {
+	return true;
 }
