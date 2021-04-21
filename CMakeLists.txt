@@ -5,7 +5,13 @@ VERSION 0.3.0
 LANGUAGES C CXX)
 
 include(GNUInstallDirs)
-find_package(ez-cmake CONFIG REQUIRED)
+include("cmake/ez-cmake/install_package.cmake")
+
+option(BUILD_TESTS "Build the test executables" ON)
+option(SEPARATE_DIRECTORY "Install the package into its own directory" ON)
+set(CONFIG_DIR "${CMAKE_INSTALL_DATAROOTDIR}/ez-gui" CACHE STRING "The relative directory to install package config files.")
+
+
 
 # The five supported loaders will be:
 # GLEW, GLEW::GLEW
@@ -68,12 +74,11 @@ target_link_libraries(rt-loader-epoxy PRIVATE rt-loader "$<BUILD_INTERFACE:${EPO
 
 
 # Build the tests once the option is enabled.
-if(${BUILD_TESTS})
+if(BUILD_TESTS)
 	add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/tests")
 endif()
 
-if("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
-	# Set the proper installation path
+if(SEPARATE_DIRECTORY)
 	set(CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}/rt-loader)
 endif()
 
@@ -144,6 +149,6 @@ install_package(
 	DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/rt-loader"
 
 	# Pre and Post configuration files for the packages. Files are run as scripts when the package is found.
-	PRECONFIG "${CMAKE_CURRENT_SOURCE_DIR}/preconfig.cmake"
-	POSTCONFIG "${CMAKE_CURRENT_SOURCE_DIR}/postconfig.cmake"
+	PRECONFIG  "cmake/preconfig.cmake"
+	POSTCONFIG "cmake/postconfig.cmake"
 )
